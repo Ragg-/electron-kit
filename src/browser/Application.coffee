@@ -27,7 +27,7 @@ class Application extends Emitter
         @windows = new WindowManager(@options)
         @command = new CommandManager(@options)
         @menu = new MenuManager(@options)
-        return 
+        return
 
     ###*
     # @protected
@@ -53,14 +53,7 @@ class Application extends Emitter
         @command.on
             # Application commands
             "app:new-window" : =>
-                if typeof @windowOptions is "function"
-                    options = @windowOptions(@options)
-                else
-                    options = @windowOptions
-
-                new AppWindow assign {}, options,
-                    url     : "file://#{__dirname}/../../renderer/index.html"
-                return
+                @windows.openWindow()
 
             "app:quit" : =>
                 app.quit()
