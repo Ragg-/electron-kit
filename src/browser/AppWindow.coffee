@@ -20,7 +20,7 @@ class AppWindow extends Emitter
             if @disposed
                 throw new Error("Window has been disposed")
 
-            BrowserWindow::[methodName].apply @browserWindow, args...
+            BrowserWindow::[methodName].apply @browserWindow, args
         return
 
     constructor : (options) ->
