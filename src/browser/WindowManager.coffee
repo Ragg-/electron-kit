@@ -33,16 +33,17 @@ class WindowManager
     ###
     addWindow : (window) ->
         beforeSize = @windows.size
-        return unless @windows.add(window).size is beforeSize
+        return if @windows.add(window).size is beforeSize
 
         @subscriptions.add window.on "focus", =>
             @setLastFocusedWindow(window)
-        @emit "did-add-window", window
+
+        @emitter.emit "did-add-window", window
         return
 
     removeWindow : (window) ->
         return unless @windows.delete(window)
-        @emit "did-remove-window", window
+        @emitter.emit "did-remove-window", window
         return
 
     #
@@ -51,7 +52,7 @@ class WindowManager
 
     setLastFocusedWindow : (window) ->
         @lastFocusedWindow = window
-        @emit "did-change-focused-window", window
+        @emitter.emit "did-change-focused-window", window
         return
 
     lastFocusedWindow : ->
