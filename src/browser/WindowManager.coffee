@@ -51,12 +51,13 @@ class WindowManager
     #
 
     setLastFocusedWindow : (window) ->
-        @lastFocusedWindow = window
+        @_lastFocusedWindow = window
         @emitter.emit "did-change-focused-window", window
         return
 
     lastFocusedWindow : ->
-        @lastFocusedWindow
+        @_lastFocusedWindow
+
 
     #
     # Events
