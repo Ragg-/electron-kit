@@ -55,8 +55,8 @@ class CommandManager extends Emitter
     ###
     on : (event, listener) ->
         if _.isPlainObject(event)
-            disposables = for event, listener of event
-                @on event, listener
+            disposables = for eventName, listener of event
+                @on eventName, listener
             return disposables
 
         super
