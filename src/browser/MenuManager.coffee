@@ -19,6 +19,32 @@ module.exports = class MenuManager extends Emitter
     # Menu building helpers
     #
 
+    translateTemplate   : (template) ->
+        wrapClick = (item) =>
+            clickListener = item.click
+
+            =>
+                Menu.sendActionToFirstResponder?(item.selector) if item.selector?
+
+                activeMenu = @getActiveMenu()
+                clickListener(item, activeMenu) if typeof clickListener is "function"
+                @emit("did-click-item", item, activeMenu)
+                @emit("did-click-command-item", item.command, item, activeMenu) if item.command?
+                return
+
+        items = _.cloneDeep(template)
+
+        for item in items
+            item.metadata ?= {}
+
+            item.click = wrapClick(item)
+            item.submenu = @translateTemplate(item.submenu) if item.submenu
+
+        items
+
+    buildFromTemplate   : (template) ->
+        Menu.buildFromTemplate @translateTemplate(template)
+
     getDefaultTemplate  : ->
         @defaultTemplate
 
