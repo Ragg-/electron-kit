@@ -15,7 +15,7 @@ class ConfigManager
             @saveThrottleMs
         } = options
 
-        @configFileName ?= "config"
+        @configFileName ?= "config.json"
         @saveThrottleMs ?= 200
         @jsonIndent ?= "  "
 
@@ -23,7 +23,7 @@ class ConfigManager
         @config = {}
         @observers = {}
 
-        @configFilePath = path.join @configDirPath, @configFileName, "json"
+        @configFilePath = path.join @configDirPath, @configFileName
         @save = _.throttle @save.bind(@), @saveThrottleMs
 
     ###*
