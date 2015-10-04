@@ -71,10 +71,22 @@ class CommandManager extends Emitter
     ###*
     # Add command observer on DOMElement
     # @param {String|HTMLElement} selector      handler element (or CSS selector)
-    # @param {String} command       handle command
+    # @param {String|Object.<String,Function>} command       handle command
     # @param {Function} callback    command listener
+    # @return {Disposable}
     ###
     observeOn : (selector, command, handler) ->
+        if _.isPlainObject(command)
+            disposables = for commandName, handler of event
+                @observeOn selector, commandName, handler
+
+            return new Disposable ->
+                disposables.forEach (disposable) ->
+                    disposable.dispose()
+
+                disposables = null
+                return
+
         listener = ->
             currentElement = document.activeElement
 
