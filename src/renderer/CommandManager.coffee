@@ -35,7 +35,7 @@ class CommandManager extends Emitter
     # @param {String} command
     # @param {Any...} args
     ###
-    dispatch : (command, args) ->
+    dispatch : (command, args...) ->
         @emit command, args...
         @dispatchToBrowser command, args...
         return
@@ -51,16 +51,42 @@ class CommandManager extends Emitter
         return
 
     #
-    # DOM Command handler
+    # Command handler
     #
+
+    on : (command, handler) ->
+        if _.isPlainObject(command)
+            disposables = for eventName, listener of command
+                @on eventName, listener
+
+            return new Disposable ->
+                disposables.forEach (disposable) ->
+                    disposable.dispose()
+
+                disposables = null
+                return
+
+        super
 
     ###*
     # Add command observer on DOMElement
     # @param {String|HTMLElement} selector      handler element (or CSS selector)
-    # @param {String} command       handle command
+    # @param {String|Object.<String,Function>} command       handle command
     # @param {Function} callback    command listener
+    # @return {Disposable}
     ###
     observeOn : (selector, command, handler) ->
+        if _.isPlainObject(command)
+            disposables = for commandName, handler of event
+                @observeOn selector, commandName, handler
+
+            return new Disposable ->
+                disposables.forEach (disposable) ->
+                    disposable.dispose()
+
+                disposables = null
+                return
+
         listener = ->
             currentElement = document.activeElement
 

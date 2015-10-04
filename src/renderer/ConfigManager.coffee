@@ -1,5 +1,6 @@
 _ = require "lodash"
 __ = require "lodash-deep"
+path = require "path"
 fs = require "fs-plus"
 
 Emitter = require "../utils/Emitter"
@@ -22,8 +23,7 @@ class ConfigManager
         @config = {}
         @observers = {}
 
-        @configFilePath = fs.resolve @configDirPath, @configFileName, "json"
-
+        @configFilePath = path.join @configDirPath, @configFileName, "json"
         @save = _.throttle @save.bind(@), @saveThrottleMs
 
     ###*

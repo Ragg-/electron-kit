@@ -112,7 +112,7 @@ class ContextMenuManager extends Emitter
         push = Array::push
 
         menuItems = path.reduce (menus, el) =>
-            return unless el instanceof HTMLElement
+            return menus unless el instanceof HTMLElement
             push.apply(menus, @templateForElement(el))
             menus
         , []

@@ -63,7 +63,7 @@ class Application extends Emitter
             "window:toggle-dev-tools" : => @windows.lastFocusedWindow()?.toggleDevTools()
             "window:reload" : => @windows.lastFocusedWindow()?.reload()
             "window:close" : =>
-                return unless (bw = @lastFocusedWindow()?.browserWindow)?
+                return unless (bw = @windows.lastFocusedWindow()?.browserWindow)?
 
                 if bw.devToolsWebContents?
                     bw.closeDevTools()
