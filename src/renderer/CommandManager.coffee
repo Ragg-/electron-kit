@@ -51,8 +51,22 @@ class CommandManager extends Emitter
         return
 
     #
-    # DOM Command handler
+    # Command handler
     #
+
+    on : (command, handler) ->
+        if _.isPlainObject(command)
+            disposables = for eventName, listener of command
+                @on eventName, listener
+
+            return new Disposable ->
+                disposables.forEach (disposable) ->
+                    disposable.dispose()
+
+                disposables = null
+                return
+
+        super
 
     ###*
     # Add command observer on DOMElement
