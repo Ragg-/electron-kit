@@ -91,8 +91,7 @@ class ConfigManager
     observe : (keyPath = null, observer) ->
         oldValue = @get keyPath
 
-        @onDidChange =>
-            newValue = @get(keyPath)
+        @onDidChange ({key, newValue}) =>
             observer(newValue, oldValue) unless _.isEqual(newValue, oldValue)
             oldValue = newValue
 
