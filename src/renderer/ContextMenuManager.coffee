@@ -78,7 +78,8 @@ class ContextMenuManager extends Emitter
 
         for selector, menuList of smm
             continue unless el.matches(selector)
-            unshift.apply(presentMenus, item) for item in menuList
+            menuList.forEach (item) ->
+                unshift.apply(presentMenus, item)
 
         # Remove first, last, consecutive separator
         last = presentMenus.length - 1
