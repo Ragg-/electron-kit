@@ -46,6 +46,17 @@ class WindowManager
         @emitter.emit "did-remove-window", window
         return
 
+
+    findWindowByBrowserWindow : (browserWindow) ->
+        target = null
+
+        @windows.forEach (appWindow) ->
+            if appWindow.browserWindow is browserWindow
+                target = appWindow
+            return
+
+        target
+
     #
     # State management
     #
