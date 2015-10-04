@@ -53,10 +53,10 @@ class CommandManager extends Emitter
     # @param {String|Object<String, Function>}  command     command name or {"commandName": listener} Object
     # @param {Function} listener
     ###
-    on : (event, listener) ->
-        if _.isPlainObject(event)
-            disposables = for eventName, listener of event
-                @on eventName, listener
+    on : (command, listener) ->
+        if _.isPlainObject(command)
+            disposables = for commandName, listener of command
+                @on commandName, listener
             return disposables
 
         super
