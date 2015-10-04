@@ -30,12 +30,15 @@ class ConfigManager
     # Initialize configure save directory
     # @protected
     ###
-    initializeConfigDir : ->
-        return if fs.existsSync(@configDirPath)
+    initializeConfigDir : (force = false)->
+        if fs.existsSync(@configDirPath) is no or force
+            fs.makeTreeSync(@configDirPath)
 
-        fs.makeTreeSync(@configDirPath)
+        if fs.existsSync(@configFilePath) is no or force
+            fs.writeFileSync(@configFilePath, "{}")
+
         @emitter.emit "did-init-config-directory"
-
+        @initializeConfigDir = ->
         return
 
     ###*
