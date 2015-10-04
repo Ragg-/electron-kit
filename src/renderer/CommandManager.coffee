@@ -35,7 +35,7 @@ class CommandManager extends Emitter
     # @param {String} command
     # @param {Any...} args
     ###
-    dispatch : (command, args) ->
+    dispatch : (command, args...) ->
         @emit command, args...
         @dispatchToBrowser command, args...
         return
