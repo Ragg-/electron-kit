@@ -54,7 +54,6 @@ class ContextMenuManager extends Emitter
         =>
             Menu.sendActionToFirstResponder?(item.selector) if item.selector?
 
-            activeMenu = @getActiveMenu()
             clickListener.call(el, item, activeMenu) if typeof clickListener is "function"
             @emit("did-click-item", item, activeMenu, el)
             @emit("did-click-command-item", item.command, el, item) if item.command?
