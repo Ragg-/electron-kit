@@ -11,14 +11,14 @@ class Application extends Emitter
     constructor : (@options = {}) ->
         super
 
-        @initializeModules()
-        @handleEvents()
+        @_initializeModules()
+        @_handleEvents()
 
 
     ###*
     # @protected
     ###
-    initializeModules : ->
+    _initializeModules : ->
         @command = new CommandManager(@options)
         @contextMenu = new ContextMenuManager(@options)
         @config = new ConfigManager(@options)
@@ -28,7 +28,7 @@ class Application extends Emitter
     ###*
     # @protected
     ###
-    handleEvents : ->
+    _handleEvents : ->
         @contextMenu.onDidClickCommandItem (command, el) =>
             @command.dispatch command, el
 
