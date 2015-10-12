@@ -28,12 +28,12 @@ class AppWindow extends Emitter
 
         @subscriptions = new CompositeDisposable
         @browserWindow = new BrowserWindow(options)
-        @handleEvents()
+        @_handleEvents()
 
     ###*
     # @protected
     ###
-    handleEvents : ->
+    _handleEvents : ->
         # delegate browserWindow events
         # https://github.com/atom/electron/blob/02bdace366f38271b5c186412f42810ecb06e99e/docs/api/browser-window.md
         [
