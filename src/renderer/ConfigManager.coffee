@@ -4,16 +4,22 @@ path = require "path"
 fs = require "fs-plus"
 
 Emitter = require "../utils/Emitter"
+deepDelete = require "../utils/deepDelete"
 
 module.exports =
 class ConfigManager
     constructor : (options = {}) ->
         {
-            @_configDirPath,
-            @_configFileName,
-            @_jsonIndent,
-            @_saveThrottleMs
+            configDirPath,
+            configFileName,
+            jsonIndent,
+            saveThrottleMs
         } = options
+
+        @_configDirPath = configDirPath
+        @_configFileName = configFileName
+        @_jsonIndent = jsonIndent
+        @_saveThrottleMs = saveThrottleMs
 
         @_configFileName ?= "config.json"
         @_saveThrottleMs ?= 200
