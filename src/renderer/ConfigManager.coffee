@@ -80,7 +80,8 @@ class ConfigManager
     # @param {String}       keyPath     Config key name (accept dot delimited key)
     ###
     get : (keyPath, defaultValue) ->
-        __.deepGet(@_config, keyPath)
+        value = __.deepGet(@_config, keyPath)
+        return if value is undefined then defaultValue else value
 
     ###*
     # Observe specified configure changed
