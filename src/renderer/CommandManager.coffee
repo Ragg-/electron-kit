@@ -10,20 +10,18 @@ Emitter = require "../utils/Emitter"
 ###
 module.exports =
 class CommandManager extends Emitter
-    emitter         : null
-
     constructor     : ->
         super
 
-        @emitter = new Emitter()
-        @domObservers = {}
-        @handleEvents()
+        @_emitter = new Emitter()
+        @_domObservers = {}
+        @_handleEvents()
 
     ###*
     # @protected
     ###
-    handleEvents    : ->
-        ipc.on "command", @didReceived.bind(@)
+    _handleEvents    : ->
+        ipc.on "command", @_didReceived.bind(@)
         return
 
     #
@@ -47,7 +45,7 @@ class CommandManager extends Emitter
     ###
     dispatchToBrowser : (command, args...) ->
         ipc.send "command", command, args...
-        @emitter.emit "did-send", {command, args}
+        @_emitter.emit "did-send", {command, args}
         return
 
     #
@@ -97,7 +95,7 @@ class CommandManager extends Emitter
 
         observerSet = {selector, listener}
 
-        commandObserver = @domObservers[command] ?= new Set
+        commandObserver = @_domObservers[command] ?= new Set
         commandObserver.add observerSet
 
         disposer = @on command, listener
@@ -114,9 +112,9 @@ class CommandManager extends Emitter
     ###*
     # @private
     ###
-    didReceived : (command, args...) ->
+    _didReceived : (command, args...) ->
         @emit command, args...
-        @emitter.emit "did-receive", {command, args}
+        @_emitter.emit "did-receive", {command, args}
         return
 
     #
@@ -127,12 +125,12 @@ class CommandManager extends Emitter
     # @param {Function} fn      listener
     ###
     onDidSend       : (fn) ->
-        @emitter.on "did-send", fn
+        @_emitter.on "did-send", fn
         new Disposable => @off "did-send", fn
 
     ###*
     # @param {Function} fn      listener
     ###
     onDidReceive    : (fn) ->
-        @emitter.on "did-receive", fn
+        @_emitter.on "did-receive", fn
         new Disposable => @off "did-receive", fn
