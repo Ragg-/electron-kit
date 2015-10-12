@@ -9,15 +9,15 @@ Emitter = require "../utils/Emitter"
 ###
 module.exports =
 class CommandManager extends Emitter
-    emitter : null
+    _emitter : null
 
     constructor : ->
         super
-        @emitter = new Emitter()
-        @handleEvents()
+        @_emitter = new Emitter()
+        @_handleEvents()
 
-    handleEvents : ->
-        ipc.on "command", @didReceived.bind(@)
+    _handleEvents : ->
+        ipc.on "command", @_didReceived.bind(@)
         return
 
     #
@@ -32,16 +32,16 @@ class CommandManager extends Emitter
         return if typeof window?.browserWindow?.webContents?.send isnt "function"
 
         window.browserWindow.webContents.send "command", command, args...
-        @emitter.emit "did-send", {window, command, args}
+        @_emitter.emit "did-send", {window, command, args}
         return
 
     #
     # Event handler
     #
 
-    didReceived : (e, command, args...) =>
+    _didReceived : (e, command, args...) =>
         @emit command, args...
-        @emitter.emit "did-receive", {command, args}
+        @_emitter.emit "did-receive", {command, args}
         return
 
     #
@@ -65,12 +65,12 @@ class CommandManager extends Emitter
     # @param {Function} listener
     ###
     onDidSend : (fn) ->
-        @emitter.on "did-send", fn
+        @_emitter.on "did-send", fn
         return
 
     ###*
     # @param {Function} listener
     ###
     onDidReceive : (fn) ->
-        @emitter.on "did-receive", fn
+        @_emitter.on "did-receive", fn
         return
