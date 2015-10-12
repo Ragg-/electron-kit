@@ -9,58 +9,58 @@ module.exports =
 class ConfigManager
     constructor : (options = {}) ->
         {
-            @configDirPath,
-            @configFileName,
-            @jsonIndent,
-            @saveThrottleMs
+            @_configDirPath,
+            @_configFileName,
+            @_jsonIndent,
+            @_saveThrottleMs
         } = options
 
-        @configFileName ?= "config.json"
-        @saveThrottleMs ?= 200
-        @jsonIndent ?= "  "
+        @_configFileName ?= "config.json"
+        @_saveThrottleMs ?= 200
+        @_jsonIndent ?= "  "
 
-        @emitter = new Emitter
-        @config = {}
+        @_emitter = new Emitter
+        @_config = {}
         @observers = {}
 
-        @configFilePath = path.join @configDirPath, @configFileName
-        @save = _.throttle @save.bind(@), @saveThrottleMs
+        @_configFilePath = path.join @_configDirPath, @_configFileName
+        @save = _.throttle @save.bind(@), @_saveThrottleMs
 
     ###*
     # Initialize configure save directory
     # @protected
     ###
-    initializeConfigDir : (force = false)->
-        if fs.existsSync(@configDirPath) is no or force
-            fs.makeTreeSync(@configDirPath)
+    _initializeConfigDir : (force = false)->
+        if fs.existsSync(@_configDirPath) is no or force
+            fs.makeTreeSync(@_configDirPath)
 
-        if fs.existsSync(@configFilePath) is no or force
-            fs.writeFileSync(@configFilePath, "{}")
+        if fs.existsSync(@_configFilePath) is no or force
+            fs.writeFileSync(@_configFilePath, "{}")
 
-        @emitter.emit "did-init-config-directory"
-        @initializeConfigDir = ->
+        @_emitter.emit "did-init-config-directory"
+        @_initializeConfigDir = ->
         return
 
     ###*
     # Load config file
     ###
     load : ->
-        @initializeConfigDir()
-        rawJSON = fs.readFileSync @configFilePath, encoding: "utf8"
-        @config = JSON.parse rawJSON
+        @_initializeConfigDir()
+        rawJSON = fs.readFileSync @_configFilePath, encoding: "utf8"
+        @_config = JSON.parse rawJSON
 
-        @emitter.emit "did-load-config-file"
+        @_emitter.emit "did-load-config-file"
         return
 
     ###*
     # Save current config to config file
     ###
     save : ->
-        @initializeConfigDir()
-        stringedJSON = JSON.stringify(@config, null, @jsonIndent)
-        fs.writeFileSync @configFilePath, stringedJSON, encoding : "utf8"
+        @_initializeConfigDir()
+        stringedJSON = JSON.stringify(@_config, null, @_jsonIndent)
+        fs.writeFileSync @_configFilePath, stringedJSON, encoding : "utf8"
 
-        @emitter.emit "did-save-config-file"
+        @_emitter.emit "did-save-config-file"
         return
 
     ###*
@@ -71,8 +71,8 @@ class ConfigManager
         oldValue = @get keyPath
         return if _.isEqual(oldValue, value)
 
-        __.deepSet(@config, keyPath, value)
-        @emitter.emit "did-change", {key: keyPath, newValue: value, oldValue}
+        __.deepSet(@_config, keyPath, value)
+        @_emitter.emit "did-change", {key: keyPath, newValue: value, oldValue}
         @save()
         return
 
@@ -81,7 +81,7 @@ class ConfigManager
     # @param {String}       keyPath     Config key name (accept dot delimited key)
     ###
     get : (keyPath, defaultValue) ->
-        __.deepGet(@config, keyPath)
+        __.deepGet(@_config, keyPath)
 
     ###*
     # Observe specified configure changed
@@ -112,22 +112,22 @@ class ConfigManager
     # @param {Function}     fn          callback
     ###
     onDidLoadConfigFile : (fn) ->
-        @emitter.on "did-load-config-file"
+        @_emitter.on "did-load-config-file"
 
     ###*
     # @param {Function}     fn          callback
     ###
     onDidSaveConfigFile : (fn) ->
-        @emitter.on "did-save-config-file"
+        @_emitter.on "did-save-config-file"
 
     ###*
     # @param {Function}     fn          callback
     ###
     onDidChange : (fn) ->
-        @emitter.on "did-change", fn
+        @_emitter.on "did-change", fn
 
     ###*
     # @param {Function}     fn          callback
     ###
     onDidInitializeConfigDirectory : (fn) ->
-        @emitter.on "did-init-config-directory"
+        @_emitter.on "did-init-config-directory"
