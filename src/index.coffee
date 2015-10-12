@@ -39,3 +39,6 @@ Object.defineProperties exports,
 
     Emitter :
         value : require "./utils/Emitter"
+
+    deepDelete :
+        value : require "./utils/deepDelete"
