@@ -9,17 +9,17 @@ module.exports = class MenuManager extends Emitter
     constructor     : ({@defaultTemplate}) ->
         super
 
-        @windowMenuMap = new WeakMap
-        @handleEvents()
+        @_windowMenuMap = new WeakMap
+        @_handleEvents()
 
-    handleEvents    : ->
+    _handleEvents    : ->
         return
 
     #
     # Menu building helpers
     #
 
-    translateTemplate   : (template) ->
+    _translateTemplate   : (template) ->
         wrapClick = (item) =>
             clickListener = item.click
 
@@ -38,35 +38,35 @@ module.exports = class MenuManager extends Emitter
             item.metadata ?= {}
 
             item.click = wrapClick(item)
-            item.submenu = @translateTemplate(item.submenu) if item.submenu
+            item.submenu = @_translateTemplate(item.submenu) if item.submenu
 
         items
 
-    buildFromTemplate   : (template) ->
-        Menu.buildFromTemplate @translateTemplate(template)
+    _buildFromTemplate   : (template) ->
+        Menu.buildFromTemplate @_translateTemplate(template)
 
-    getDefaultTemplate  : ->
+    _getDefaultTemplate  : ->
         @defaultTemplate
 
     #
     # Menu controling
     #
 
-    getActiveMenu       : ->
+    getActiveMenu       : ()->
         Menu.getApplicationMenu()
 
     attachMenu          : (window) ->
-        menu = @windowMenuMap.get window
+        menu = @_windowMenuMap.get window
 
         unless menu?
             # console.log @defaultTemplate
-            menu = @buildFromTemplate @getDefaultTemplate()
-            @windowMenuMap.set window, menu
+            menu = @_buildFromTemplate @_getDefaultTemplate()
+            @_windowMenuMap.set window, menu
 
         menu
 
     changeActiveMenu    : (window) ->
-        menu = @windowMenuMap.get window
+        menu = @_windowMenuMap.get window
         menu = @attachMenu(window) unless menu?
 
         Menu.setApplicationMenu(menu)
