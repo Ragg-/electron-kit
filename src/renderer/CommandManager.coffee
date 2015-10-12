@@ -38,6 +38,16 @@ class CommandManager extends Emitter
         @dispatchToBrowser command, args...
         return
 
+    ###*
+    # Dispatch command to Browser process
+    # @param {String} command
+    # @param {Any...} args
+    ###
+    dispatchToBrowser : (command, args...) ->
+        ipc.send "command", command, args...
+        @_emitter.emit "did-send", {command, args}
+        return
+
     #
     # Command handler
     #
