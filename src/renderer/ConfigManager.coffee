@@ -84,6 +84,17 @@ class ConfigManager
         return if value is undefined then defaultValue else value
 
     ###*
+    # Unset config value
+    # @param {String}       keyPath     Config key name (accept dot delimited key)
+    ###
+    delete : (keyPath) ->
+        oldValue = @get(keyPath)
+        deepDelete(@_config, keyPath)
+        @_emitter.emit "did-change", {key: keyPath, newValue: undefined, oldValue, deleted: true}
+        @save()
+        return
+
+    ###*
     # Observe specified configure changed
     # @param {String}       keyPath     Observing config key name (accept dot delimited key)
     # @param {Function}     observer    callback function
