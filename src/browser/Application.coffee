@@ -16,14 +16,14 @@ class Application extends Emitter
     constructor : (@options = {}) ->
         super
 
-        @initializeModules()
-        @handleEvents()
-        @handleCommands()
+        @_initializeModules()
+        @_handleEvents()
+        @_handleCommands()
 
     ###*
     # @protected
     ###
-    initializeModules : ->
+    _initializeModules : ->
         @windows = new WindowManager(@options)
         @command = new CommandManager(@options)
         @menu = new MenuManager(@options)
@@ -32,7 +32,7 @@ class Application extends Emitter
     ###*
     # @protected
     ###
-    handleEvents : ->
+    _handleEvents : ->
 
         # MenuManager events
         @windows.onDidAddWindow (window) =>
@@ -49,7 +49,7 @@ class Application extends Emitter
     ###*
     # @protected
     ###
-    handleCommands : ->
+    _handleCommands : ->
         @command.on
             # Application commands
             "app:new-window" : =>
