@@ -48,7 +48,7 @@ class ContextMenuManager extends Emitter
     # Context menu builder methods
     #
 
-    wrapClick : (item, el) ->
+    _wrapClick : (item, el) ->
         clickListener = item.click
 
         =>
@@ -59,18 +59,18 @@ class ContextMenuManager extends Emitter
             @emit("did-click-command-item", item.command, el, item) if item.command?
             return
 
-    translateTemplate : (template, el) ->
+    _translateTemplate : (template, el) ->
         items = _.cloneDeep(template)
 
         for item in items
             item.metadata ?= {}
 
-            item.click = @wrapClick(item, el)
-            item.submenu = @translateTemplate(item.submenu, el) if item.submenu
+            item.click = @_wrapClick(item, el)
+            item.submenu = @_translateTemplate(item.submenu, el) if item.submenu
 
         items
 
-    templateForElement : (el) ->
+    _templateForElement : (el) ->
         unshift = Array::unshift
         smm = @menus
         presentMenus = []
@@ -89,7 +89,7 @@ class ContextMenuManager extends Emitter
             prevItem = presentMenus[i - 1]
             presentMenus.splice(i, 1) if prevItem? and prevItem.type is "separator" and item.type is "separator"
 
-        @translateTemplate(presentMenus, el)
+        @_translateTemplate(presentMenus, el)
 
     #
     # Context menu display methods
@@ -100,7 +100,7 @@ class ContextMenuManager extends Emitter
     # @param {HTMLElement} el
     ###
     showForElement : (el) ->
-        menu = Menu.buildFromTemplate(@templateForElement(el))
+        menu = Menu.buildFromTemplate(@_templateForElement(el))
         menu.popup(Remote.getCurrentWindow())
         return
 
@@ -113,7 +113,7 @@ class ContextMenuManager extends Emitter
 
         menuItems = path.reduce (menus, el) =>
             return menus unless el instanceof HTMLElement
-            push.apply(menus, @templateForElement(el))
+            push.apply(menus, @_templateForElement(el))
             menus
         , []
 
