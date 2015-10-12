@@ -21,7 +21,6 @@ class ConfigManager
 
         @_emitter = new Emitter
         @_config = {}
-        @observers = {}
 
         @_configFilePath = path.join @_configDirPath, @_configFileName
         @save = _.throttle @save.bind(@), @_saveThrottleMs
