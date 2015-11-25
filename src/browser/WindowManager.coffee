@@ -1,4 +1,4 @@
-BrowserWindow = require "browser-window"
+{BrowserWindow} = require "electron"
 
 {CompositeDisposable} = require "event-kit"
 

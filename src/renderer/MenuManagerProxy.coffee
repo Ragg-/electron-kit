@@ -1,5 +1,5 @@
-Remote = require "remote"
-Menu = Remote.require "menu"
+{remote} = require "remote"
+Menu = remote.Menu
 
 module.exports =
 class MenuManagerProxy

@@ -1,4 +1,4 @@
-ipc = require "ipc"
+{ipcRenderer} = require "electron"
 
 _ = require "lodash"
 {Disposable} = require "event-kit"
@@ -21,7 +21,7 @@ class CommandManager extends Emitter
     # @protected
     ###
     _handleEvents    : ->
-        ipc.on "command", @_didReceived.bind(@)
+        ipcRenderer.on "command", @_didReceived.bind(@)
         return
 
     #
@@ -44,7 +44,7 @@ class CommandManager extends Emitter
     # @param {Any...} args
     ###
     dispatchToBrowser : (command, args...) ->
-        ipc.send "command", command, args...
+        ipcRenderer.send "command", command, args...
         @_emitter.emit "did-send", {command, args}
         return
 

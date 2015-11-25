@@ -1,5 +1,4 @@
-app = require "app"
-ipc = require "ipc"
+{app} = require "electron"
 
 Emitter = require "../utils/Emitter"
 WindowManager = require "./WindowManager"

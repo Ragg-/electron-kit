@@ -1,4 +1,4 @@
-ipc = require "ipc"
+{ipcMain} = require "electron"
 
 _ = require "lodash"
 
@@ -17,7 +17,7 @@ class CommandManager extends Emitter
         @_handleEvents()
 
     _handleEvents : ->
-        ipc.on "command", @_didReceived.bind(@)
+        ipcMain.on "command", @_didReceived.bind(@)
         return
 
     #

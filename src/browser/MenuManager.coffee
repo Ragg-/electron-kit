@@ -1,4 +1,4 @@
-Menu = require "menu"
+{Menu} = require "electron"
 path = require "path"
 
 _ = require "lodash"

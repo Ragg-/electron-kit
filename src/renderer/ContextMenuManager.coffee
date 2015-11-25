@@ -1,5 +1,5 @@
-Remote = require "remote"
-Menu = Remote.require("menu")
+{remote} = require "electron"
+Menu = remote.Menu
 
 _ = require "lodash"
 {Disposable} = require "event-kit"
@@ -101,7 +101,7 @@ class ContextMenuManager extends Emitter
     ###
     showForElement : (el) ->
         menu = Menu.buildFromTemplate(@_templateForElement(el))
-        menu.popup(Remote.getCurrentWindow())
+        menu.popup(remote.getCurrentWindow())
         return
 
     ###*
@@ -118,7 +118,7 @@ class ContextMenuManager extends Emitter
         , []
 
         menu = Menu.buildFromTemplate(menuItems)
-        menu.popup(Remote.getCurrentWindow())
+        menu.popup(remote.getCurrentWindow())
         return
 
 
