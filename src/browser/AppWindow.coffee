@@ -55,9 +55,7 @@ class AppWindow extends Emitter
             "leave-full-screen"
             "enter-html-full-screen"
             "leave-html-full-screen"
-            "devtools-opened"
-            "devtools-closed"
-            "devtools-focused"
+            "app-command"
         ].forEach (name) =>
             @browserWindow.on name, => @emit name, arguments...
             @subscriptions.add new Disposable =>
